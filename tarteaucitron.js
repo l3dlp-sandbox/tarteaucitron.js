@@ -1160,7 +1160,8 @@ var tarteaucitron = {
             isDNTRequested = (navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1" || window.doNotTrack === "1"),
             currentStatus = (isAllowed) ? tarteaucitron.lang.allowed : tarteaucitron.lang.disallowed,
             state = (undefined !== service.defaultState) ? service.defaultState :
-                    (undefined !== tarteaucitron.parameters.serviceDefaultState ? tarteaucitron.parameters.serviceDefaultState : 'wait');
+                    (undefined !== tarteaucitron.parameters.serviceDefaultState ? tarteaucitron.parameters.serviceDefaultState : 'wait'),
+            serviceDesc = tarteaucitron.lang['desc-' + service.key] || '';
 
 
         if (tarteaucitron.added[service.key] !== true) {
@@ -1169,6 +1170,9 @@ var tarteaucitron = {
             html += '<li id="' + service.key + 'Line" class="tarteaucitronLine">';
             html += '   <div class="tarteaucitronName">';
             html += '       <span class="tarteaucitronH3" role="heading" aria-level="4">' + service.name + '</span>';
+            if (serviceDesc !== '') {
+                html += '       <span class="tarteaucitronServiceDescription">' + serviceDesc + '</span>';
+            }
             html += '       <div class="tarteaucitronStatusInfo">';
             html += '          <span class="tacCurrentStatus" id="tacCurrentStatus' + service.key + '">'+currentStatus+'</span>';
             html += '          <span class="tarteaucitronReadmoreSeparator"> - </span>';
