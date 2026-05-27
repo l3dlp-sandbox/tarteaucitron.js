@@ -2062,11 +2062,47 @@ var tarteaucitron = {
         },
         "purge": function (arr) {
             "use strict";
-            var i;
+
+            var i,
+                j,
+                k,
+                service,
+                allowed,
+                rgxpCookie;
 
             for (i = 0; i < arr.length; i += 1) {
 
-                var rgxpCookie = new RegExp("^(.*;)?\\s*" + arr[i] + "\\s*=\\s*[^;]+(.*)?$");
+                allowed = false;
+
+                if (tarteaucitron.parameters.cookieslist !== true && tarteaucitron.parameters.cookieslistEmbed !== true) {
+
+                    for (j = 0; j < tarteaucitron.job.length; j += 1) {
+
+                        service = tarteaucitron.services[tarteaucitron.job[j]];
+
+                        if (service !== undefined && service.cookies !== undefined) {
+
+                            for (k = 0; k < service.cookies.length; k += 1) {
+
+                                if (service.cookies[k] === arr[i]) {
+                                    allowed = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (allowed) {
+                            break;
+                        }
+                    }
+
+                    if (!allowed) {
+                        continue;
+                    }
+                }
+
+                rgxpCookie = new RegExp("^(.*;)?\\s*" + arr[i] + "\\s*=\\s*[^;]+(.*)?$");
+
                 if (document.cookie.match(rgxpCookie)) {
                     document.cookie = arr[i] + '=; expires=Thu, 01 Jan 2000 00:00:00 GMT; path=/;';
                     document.cookie = arr[i] + '=; expires=Thu, 01 Jan 2000 00:00:00 GMT; path=/; domain=.' + location.hostname + ';';
